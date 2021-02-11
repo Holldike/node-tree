@@ -1,0 +1,76 @@
+<!DOCTYPE>
+<html lang="en">
+<head>
+    <title>!DOCTYPE</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            font-family: sans-serif;
+        }
+
+        #root {
+            justify-content: center;
+            align-items: center;
+            display: flex;
+        }
+
+        .control-panel {
+            color: white;
+            background: #a9a9fc;
+            cursor: pointer;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin: 5px;
+        }
+
+        .tree {
+            margin: 0 15px 0 15px;
+            border-left: 2px solid #6beaaa;
+        }
+
+        .control-panel div {
+            padding: 2px;
+            margin: 3px;
+        }
+
+
+    </style>
+</head>
+
+<body>
+<div id="root">
+</div>
+
+<script src="src/NodeRepository.js"></script>
+<script src="src/NodeTreeViewer.js"></script>
+<script src="src/NodeTree.js"></script>
+<script src="src/Node.js"></script>
+
+<script>
+    const NODES = [
+        {id: 0, name: 'node-0', parent_id: null},
+        {id: 1, name: 'node-1', parent_id: 0},
+        {id: 2, name: 'node-2', parent_id: 0},
+        {id: 3, name: 'node-3', parent_id: 0},
+        {id: 4, name: 'node-4', parent_id: 0},
+        {id: 5, name: 'node-5', parent_id: 0},
+        {id: 6, name: 'node-6', parent_id: 0},
+        {id: 7, name: 'node-7', parent_id: 0},
+        {id: 8, name: 'node-8', parent_id: 0},
+        {id: 9, name: 'node-9', parent_id: 0},
+    ]
+
+    let nodeRepository = new NodeRepository();
+    let nodeTreeViewer = new NodeTreeViewer(document.getElementById('root'));
+    let nodeTree = new NodeTree(
+        nodeRepository,
+        nodeTreeViewer
+    );
+
+    nodeTree.process();
+
+</script>
+</body>
+</html>
