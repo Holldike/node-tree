@@ -10,24 +10,98 @@
         }
 
         #root {
+            border: 1px solid #6be9aa;
+            padding: 10px;
+            position: relative;
+        }
+
+        .modal {
+            color: rgb(43 42 42);
+            background: white;
+            z-index: 1;
+            position: absolute;
+            width: 100%;
+            border-top: 1px solid #6be9aa;
+            border-bottom: 1px solid #6be9aa;
+        }
+
+        .modal-header {
+            padding: 5px;
+            border-bottom: 1px solid silver;
+        }
+
+        .modal-text {
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .modal-confirm-panel {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid silver;
+            padding: 5px;
+
+        }
+
+        .modal-confirm-panel-timer {
+            width: 10px;
+            height: 10px;
+            background: red;
+
+        }
+
+        .modal-confirm-panel-button-box {
+            display: flex;
+
+        }
+
+        .modal-confirm-panel-consent-button {
+            background: #6be9aa;
+            padding: 5px;
+
+        }
+
+        .modal-confirm-panel-cancel-button {
+            background: #c21e1e;
+            padding: 5px;
+
+        }
+
+        .delete-confirmation {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000b5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .content {
             justify-content: center;
             align-items: center;
             display: flex;
+            width: 100%;
+            height: 100%;
         }
 
         .control-panel {
-            color: white;
+            color: #101010;
             background: #a9a9fc;
             cursor: pointer;
             display: inline-flex;
             justify-content: center;
             align-items: center;
             margin: 5px;
+            border: 1px solid #6be9aa;
         }
 
         .tree {
             margin: 0 15px 0 15px;
-            border-left: 2px solid #6beaaa;
+            border-left: 1px solid #6be9aa;
+
         }
 
         .control-panel div {
@@ -35,28 +109,29 @@
             margin: 3px;
         }
 
-
     </style>
 </head>
 
 <body>
-<div id="root">
+<div class="content">
+    <div id="root">
+
+    </div>
 </div>
 
 <script src="src/NodeRepository.js"></script>
 <script src="src/NodeTreeViewer.js"></script>
 <script src="src/NodeTree.js"></script>
-<script src="src/Node.js"></script>
 
 <script>
     const NODES = [
         {id: 0, name: 'node-0', parent_id: null},
         {id: 1, name: 'node-1', parent_id: 0},
-        {id: 2, name: 'node-2', parent_id: 0},
-        {id: 3, name: 'node-3', parent_id: 0},
+        {id: 2, name: 'node-2', parent_id: 1},
+        {id: 3, name: 'node-3', parent_id: 1},
         {id: 4, name: 'node-4', parent_id: 0},
-        {id: 5, name: 'node-5', parent_id: 0},
-        {id: 6, name: 'node-6', parent_id: 0},
+        {id: 5, name: 'node-5', parent_id: 2},
+        {id: 6, name: 'node-6', parent_id: 2},
         {id: 7, name: 'node-7', parent_id: 0},
         {id: 8, name: 'node-8', parent_id: 0},
         {id: 9, name: 'node-9', parent_id: 0},

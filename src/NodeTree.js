@@ -6,9 +6,17 @@ class NodeTree {
         this.nodeRepository = nodeRepository;
         this.nodeTreeViewer = nodeTreeViewer;
 
+        this.addNode = this.addNode.bind(this);
+        this.deleteNode = this.deleteNode.bind(this);
+
     }
 
     deleteNode(node) {
+        if (node.parent_id === null) {
+            this.nodeTreeViewer.deleteConfirmation();
+            return;
+        }
+
         this.nodeRepository.delete(node);
         this.nodeRepository.save();
 
