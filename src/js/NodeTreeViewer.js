@@ -1,8 +1,9 @@
 class NodeTreeViewer {
     $box
     nodes;
-    deleteNodeCallback;
     addNodeCallback;
+    deleteNodeCallback;
+    addRootNodeCallback;
 
     constructor($box) {
         this.$box = $box;
@@ -16,6 +17,11 @@ class NodeTreeViewer {
 
     setAddNodeCallback(callback) {
         this.addNodeCallback = callback;
+
+    }
+
+    setAddRootNodeCallback(callback) {
+        this.addRootNodeCallback = callback;
 
     }
 
@@ -33,7 +39,15 @@ class NodeTreeViewer {
         $name.innerHTML = node.name;
 
         let $remove = document.createElement('div');
-        $remove.onclick = () => this.deleteNodeCallback(node)
+
+        if (node.parent_id === null && this.nodes.length > 1) {
+            $remove.onclick = () => this.renderDeleteConfirmation(node);
+
+        } else {
+            $remove.onclick = () => this.deleteNodeCallback(node);
+
+        }
+
         $remove.innerHTML = '-';
 
         let $controlPanel = document.createElement('div');
@@ -51,7 +65,7 @@ class NodeTreeViewer {
         return $element;
     }
 
-    deleteConfirmation() {
+    renderDeleteConfirmation(rootNode) {
         let $deleteConfirmation = document.createElement('div');
         $deleteConfirmation.className = 'delete-confirmation';
 
@@ -61,6 +75,11 @@ class NodeTreeViewer {
         let $h4 = document.createElement('h4');
         $h4.className = 'modal-header';
         $h4.textContent = 'Delete Confirmation';
+
+        let $close = document.createElement('div');
+        $close.onclick = this.closeDeleteConfirmation;
+        $close.className = 'modal-close';
+        $close.textContent = 'X';
 
         let $text = document.createElement('div');
         $text.className = 'modal-text';
@@ -72,15 +91,39 @@ class NodeTreeViewer {
         let $timer = document.createElement('div');
         $timer.className = 'modal-confirm-panel-timer';
 
+        let timeoutSecond = 20;
+        let $timeout = document.createElement('div');
+        $timeout.textContent = String(timeoutSecond);
+
+        $timer.append($timeout);
+
+        let interval = setInterval(function (closeDeleteConfirmation) {
+                --timeoutSecond;
+
+                if (timeoutSecond < 0) {
+                    closeDeleteConfirmation();
+                    clearTimeout(interval);
+
+                }
+
+                $timer.textContent = String(timeoutSecond);
+
+
+            }, 1000, this.closeDeleteConfirmation
+        );
+
         let $buttonBox = document.createElement('div')
         $buttonBox.className = 'modal-confirm-panel-button-box';
 
         let $consentButton = document.createElement('div');
+        $consentButton.onclick = () => this.deleteNodeCallback(rootNode);
         $consentButton.className = 'modal-confirm-panel-consent-button';
         $consentButton.textContent = 'Yes';
 
         let $cancelButton = document.createElement('div');
+        $cancelButton.onclick = () => this.closeDeleteConfirmation();
         $cancelButton.className = 'modal-confirm-panel-cancel-button';
+
         $cancelButton.textContent = 'No';
 
         $buttonBox.append($cancelButton);
@@ -91,6 +134,7 @@ class NodeTreeViewer {
 
         $modal.append($h4);
         $modal.append($text);
+        $modal.append($close);
         $modal.append($confirmPanel);
 
         $deleteConfirmation.append($modal);
@@ -98,7 +142,12 @@ class NodeTreeViewer {
         this.$box.append($deleteConfirmation)
     }
 
-    getTreeDOM(nodes, parent_id) {
+    closeDeleteConfirmation() {
+        document.querySelector('.delete-confirmation').remove();
+
+    }
+
+    createTreeDOM(nodes, parent_id) {
         let $dom = document.createElement('div');
         $dom.className = 'tree';
 
@@ -106,7 +155,7 @@ class NodeTreeViewer {
             if (nodes[i].parent_id === parent_id) {
                 let $node = this.createNodeElement(nodes[i]);
 
-                $node.append(this.getTreeDOM(nodes, nodes[i].id));
+                $node.append(this.createTreeDOM(nodes, nodes[i].id));
 
                 $dom.append($node);
 
@@ -119,8 +168,6 @@ class NodeTreeViewer {
     }
 
     render() {
-        let $treeDOM = this.getTreeDOM(this.nodes, null);
-
         if (this.$box.children.length) {
             while (this.$box.firstChild) {
                 this.$box.removeChild(this.$box.lastChild);
@@ -129,7 +176,23 @@ class NodeTreeViewer {
 
         }
 
-        this.$box.append($treeDOM);
+        if (!this.nodes.length) {
+            this.$box.append(this.createCreateRootElement());
+
+        } else {
+            this.$box.append(this.createTreeDOM(this.nodes, null));
+
+        }
+
+    }
+
+    createCreateRootElement() {
+        let $createRoot = document.createElement('div');
+        $createRoot.onclick = this.addRootNodeCallback;
+        $createRoot.className = 'create-root'
+        $createRoot.textContent = 'Create Root';
+
+        return $createRoot;
 
     }
 }

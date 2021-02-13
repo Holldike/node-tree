@@ -1,7 +1,7 @@
 class NodeRepository {
     nodes;
 
-    load() {
+    constructor() {
         this.nodes = NODES;
 
     }
@@ -24,6 +24,11 @@ class NodeRepository {
 
     add(node) {
         this.nodes.push({id: 23, name: 'node', parent_id: node.id});
+
+    }
+
+    createRoot() {
+        this.nodes.push({id: 1, name: 'node', parent_id: null});
 
     }
 
