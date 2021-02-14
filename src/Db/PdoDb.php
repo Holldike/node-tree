@@ -1,5 +1,9 @@
 <?php
 
+namespace Db;
+
+use PDO;
+use PDOStatement;
 
 class PdoDb implements DbInterface
 {
@@ -17,14 +21,6 @@ class PdoDb implements DbInterface
         ))
             ->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    }
-
-    /**
-     * @return PDO
-     */
-    public function getConnect()
-    {
-        return $this->connect;
     }
 
     /**

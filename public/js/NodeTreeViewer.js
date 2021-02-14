@@ -181,6 +181,16 @@ class NodeTreeViewer {
 
     }
 
+    createCreateRootElement() {
+        let $createRoot = document.createElement('div');
+        $createRoot.onclick = this.addRootNodeCallback;
+        $createRoot.className = 'create-root'
+        $createRoot.textContent = 'Create Root';
+
+        return $createRoot;
+
+    }
+
     render() {
         if (this.$box.children.length) {
             while (this.$box.firstChild) {
@@ -197,16 +207,6 @@ class NodeTreeViewer {
             this.$box.append(this.createTreeDOM(this.nodes, null));
 
         }
-
-    }
-
-    createCreateRootElement() {
-        let $createRoot = document.createElement('div');
-        $createRoot.onclick = this.addRootNodeCallback;
-        $createRoot.className = 'create-root'
-        $createRoot.textContent = 'Create Root';
-
-        return $createRoot;
 
     }
 

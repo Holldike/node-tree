@@ -1,10 +1,15 @@
 <?php
 
 
-namespace src\Controller;
+namespace Controller;
 
+use Controller;
 
-class IndexController
+class IndexController extends Controller
 {
+    public function indexAction()
+    {
+        return (new NodeTree())->indexAction();
 
+    }
 }
