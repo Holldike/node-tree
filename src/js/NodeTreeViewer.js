@@ -41,7 +41,7 @@ class NodeTreeViewer {
         let $remove = document.createElement('div');
 
         if (node.parent_id === null && this.nodes.length > 1) {
-            $remove.onclick = () => this.renderDeleteConfirmation(node);
+            $remove.onclick = () => this.$box.append(this.createDeleteConfirmation(node));
 
         } else {
             $remove.onclick = () => this.deleteNodeCallback(node);
@@ -63,9 +63,10 @@ class NodeTreeViewer {
         $element.append($controlPanel);
 
         return $element;
+
     }
 
-    renderDeleteConfirmation(rootNode) {
+    createDeleteConfirmation(node) {
         let $deleteConfirmation = document.createElement('div');
         $deleteConfirmation.className = 'delete-confirmation';
 
@@ -75,11 +76,6 @@ class NodeTreeViewer {
         let $h4 = document.createElement('h4');
         $h4.className = 'modal-header';
         $h4.textContent = 'Delete Confirmation';
-
-        let $close = document.createElement('div');
-        $close.onclick = this.closeDeleteConfirmation;
-        $close.className = 'modal-close';
-        $close.textContent = 'X';
 
         let $text = document.createElement('div');
         $text.className = 'modal-text';
@@ -97,12 +93,12 @@ class NodeTreeViewer {
 
         $timer.append($timeout);
 
-        let interval = setInterval(function (closeDeleteConfirmation) {
+        let timerInterval = setInterval(function (closeDeleteConfirmation) {
                 --timeoutSecond;
 
                 if (timeoutSecond < 0) {
                     closeDeleteConfirmation();
-                    clearTimeout(interval);
+                    clearTimeout(timerInterval);
 
                 }
 
@@ -112,16 +108,33 @@ class NodeTreeViewer {
             }, 1000, this.closeDeleteConfirmation
         );
 
+        let $close = document.createElement('div');
+
+        $close.onclick = () => {
+            this.closeDeleteConfirmation()
+            clearTimeout(timerInterval);
+
+        };
+
+        $close.className = 'modal-close';
+        $close.textContent = 'X';
+
         let $buttonBox = document.createElement('div')
         $buttonBox.className = 'modal-confirm-panel-button-box';
 
         let $consentButton = document.createElement('div');
-        $consentButton.onclick = () => this.deleteNodeCallback(rootNode);
+        $consentButton.onclick = () => this.deleteNodeCallback(node);
         $consentButton.className = 'modal-confirm-panel-consent-button';
         $consentButton.textContent = 'Yes';
 
         let $cancelButton = document.createElement('div');
-        $cancelButton.onclick = () => this.closeDeleteConfirmation();
+
+        $cancelButton.onclick = () => {
+            this.closeDeleteConfirmation()
+            clearTimeout(timerInterval);
+
+        };
+
         $cancelButton.className = 'modal-confirm-panel-cancel-button';
 
         $cancelButton.textContent = 'No';
@@ -139,7 +152,8 @@ class NodeTreeViewer {
 
         $deleteConfirmation.append($modal);
 
-        this.$box.append($deleteConfirmation)
+        return $deleteConfirmation;
+
     }
 
     closeDeleteConfirmation() {
@@ -195,4 +209,5 @@ class NodeTreeViewer {
         return $createRoot;
 
     }
+
 }
