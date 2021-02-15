@@ -9,7 +9,7 @@ class IndexController extends Controller
 {
     public function indexAction()
     {
-        return (new NodeTree())->indexAction();
+        (new NodeController())->indexAction();
 
     }
 }

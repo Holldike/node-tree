@@ -4,16 +4,16 @@ namespace Controller;
 
 use Controller;
 
-class NodeTree extends Controller
+class NodeController extends Controller
 {
 
     public function indexAction()
     {
-        return $this->view->render('NodeTree/index.html');
+        $this->view->render('NodeTree/index.html');
 
     }
 
-    public function createRootAction()
+    public function getNodes()
     {
 
     }

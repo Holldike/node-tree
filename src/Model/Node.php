@@ -1,7 +1,7 @@
 <?php
 
 
-class Node
+class Node extends Model
 {
 
 }
