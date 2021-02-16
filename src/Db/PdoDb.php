@@ -30,7 +30,7 @@ class PdoDb extends AbstractDb
     /**
      * @inheritDoc
      */
-    public function query($sql, $params): DbResult
+    public function query($sql, $params)
     {
 
         $stmt = $this->connect->prepare($sql);
@@ -46,7 +46,7 @@ class PdoDb extends AbstractDb
     /**
      * @inheritDoc
      */
-    public function getLastId(): int
+    public function getLastId()
     {
 
         return $this->connect->lastInsertId();

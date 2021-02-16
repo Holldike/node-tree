@@ -8,7 +8,7 @@ abstract class AbstractDb
      * @param $params
      * @return DbResult
      */
-    abstract public function query($sql, $params): DbResult;
+    abstract public function query($sql, $params);
 
     /**
      * @return int
