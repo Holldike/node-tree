@@ -2,18 +2,19 @@
 
 namespace Db;
 
+use AbstractDb;
+use DbResult;
 use PDO;
-use PDOException;
-use PDOStatement;
 
-class PdoDb implements DbInterface
+class PdoDb extends AbstractDb
 {
+
     /**
      * @var PDO
      */
     public $connect;
 
-    public function connect()
+    public function __construct()
     {
 
         $this->connect = (new PDO(
@@ -27,16 +28,28 @@ class PdoDb implements DbInterface
     }
 
     /**
-     * @param $sql
-     * @param $params
-     * @return bool|PDOStatement
+     * @inheritDoc
      */
-    public function query($sql, $params)
+    public function query($sql, $params): DbResult
     {
 
         $stmt = $this->connect->prepare($sql);
         $stmt->execute($params);
-        return $stmt;
+
+        $dbResult = new DbResult();
+        $dbResult->setData($stmt->fetchAll(PDO::FETCH_ASSOC));
+
+        return $dbResult;
+
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getLastId(): int
+    {
+
+        return $this->connect->lastInsertId();
 
     }
 }

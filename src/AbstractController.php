@@ -1,8 +1,6 @@
 <?php
 
-use Model\Node;
-
-abstract class Controller
+abstract class AbstractController
 {
     /**
      * @var View

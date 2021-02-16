@@ -3,9 +3,9 @@
 
 namespace Controller;
 
-use Controller;
+use AbstractController;
 
-class IndexController extends Controller
+class IndexController extends AbstractController
 {
     public function indexAction()
     {

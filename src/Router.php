@@ -2,6 +2,7 @@
 
 class Router
 {
+
     /**
      * @var string
      */
@@ -14,6 +15,7 @@ class Router
 
     public function __construct()
     {
+
         $explodedUri = explode('/', $this->clearUri($_SERVER['REQUEST_URI']));
 
         $this->controller = "Controller\\" . ($explodedUri[1] ? ucfirst($explodedUri[1]) : 'Index');
@@ -29,11 +31,13 @@ class Router
      */
     private function clearUri($uri)
     {
+
         if (false !== $pos = strpos($_SERVER['REQUEST_URI'], '?')) {
             $uri = substr($_SERVER['REQUEST_URI'], 0, $pos);
         }
 
         return rawurldecode($uri);
+
     }
 
     /**
@@ -41,7 +45,9 @@ class Router
      */
     public function getController()
     {
+
         return $this->controller;
+
     }
 
     /**
@@ -49,6 +55,8 @@ class Router
      */
     public function getAction()
     {
+
         return $this->action;
+
     }
 }

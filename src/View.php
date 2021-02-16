@@ -8,6 +8,7 @@ class View
      */
     public function render($view)
     {
+
         require(VIEW_DIR . $view);
 
     }

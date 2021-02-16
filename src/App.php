@@ -2,6 +2,7 @@
 
 class App
 {
+
     /**
      * @var Router
      */
@@ -12,6 +13,7 @@ class App
      */
     public function __construct($router)
     {
+        
         $this->router = $router;
 
     }
@@ -21,6 +23,7 @@ class App
      */
     public function run()
     {
+
         $controller = $this->router->getController();
         $action = $this->router->getAction();
 

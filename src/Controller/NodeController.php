@@ -2,10 +2,10 @@
 
 namespace Controller;
 
-use Controller;
+use AbstractController;
 use Model\Node;
 
-class NodeController extends Controller
+class NodeController extends AbstractController
 {
 
     public function indexAction()

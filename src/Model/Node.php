@@ -2,10 +2,9 @@
 
 namespace Model;
 
-use Model;
-use PDO;
+use AbstractModel;
 
-class Node extends Model
+class Node extends AbstractModel
 {
     private $id;
     private $name;
@@ -33,14 +32,13 @@ class Node extends Model
     }
 
     /**
-     * @param $id
-     * @return $this|bool
+     * @inheritDoc
      */
     public function load($id)
     {
 
-        $result = $this->db->query('SELECT * FROM node WHERE id = :id', ['id' => $id]);
-        $data = $result->fetch(PDO::FETCH_ASSOC);
+        $dbResult = $this->db->query('SELECT * FROM node WHERE id = :id', ['id' => $id]);
+        $data = $dbResult->getFirst();
 
         if (!$data) {
             return false;
@@ -52,15 +50,13 @@ class Node extends Model
     }
 
     /**
-     * @param bool $array
-     * @return array
+     * @inheritDoc
      */
     public function loadAll($array = false)
     {
 
-        $result = $this->db->query('SELECT * FROM node', []);
-
-        $rows = $result->fetchAll(PDO::FETCH_ASSOC);
+        $dbResult = $this->db->query('SELECT * FROM node', []);
+        $rows = $dbResult->getData();
 
         if ($array) {
             return $rows;
@@ -74,31 +70,34 @@ class Node extends Model
 
         }
 
-
         return $nodes;
 
     }
 
     /**
-     * @param $data
-     * @return $this
+     * @inheritDoc
      */
     public function assign($data)
     {
+        foreach ($data as $prop => $value) {
+            if (property_exists($this, $prop)) {
+                $this->$prop = $value;
 
-        $this->id = $data['id'];
-        $this->name = $data['name'];
-        $this->parent_id = $data['parent_id'];
+            }
+
+        }
 
         return $this;
 
     }
 
+    /**
+     * @inheritDoc
+     */
     public function delete()
     {
 
-        $children = $this->db->query('SELECT * FROM node WHERE parent_id = :parent_id', ['parent_id' => $this->id])
-            ->fetchAll(PDO::FETCH_ASSOC);
+        $children = $this->db->query('SELECT * FROM node WHERE parent_id = :parent_id', ['parent_id' => $this->id])->getData();
 
         if ($children) {
             foreach ($children as $child) {
@@ -110,8 +109,12 @@ class Node extends Model
 
         $this->db->query('DELETE FROM node WHERE id = :id', ['id' => $this->id]);
 
+        return true;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function save()
     {
 
@@ -123,12 +126,15 @@ class Node extends Model
 
             return $this;
 
-        }
+        } else {
+            $this->db->query(
+                'INSERT INTO node (name, parent_id) VALUES (:name, :parent_id)',
+                ['name' => $this->name, 'parent_id' => $this->parent_id]
+            );
 
-        $result = $this->db->query(
-            'INSERT INTO node (name, parent_id) VALUES (:name, :parent_id)',
-            ['name' => $this->name, 'parent_id' => $this->parent_id]
-        );
+            return self::load($this->db->getLastId());
+
+        }
 
     }
 
