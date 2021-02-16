@@ -6,6 +6,7 @@ class NodeTree {
         this.nodeRepository = nodeRepository;
         this.nodeTreeViewer = nodeTreeViewer;
 
+        this.render = this.render.bind(this);
         this.addNode = this.addNode.bind(this);
         this.deleteNode = this.deleteNode.bind(this);
         this.createRoot = this.createRoot.bind(this);
@@ -14,30 +15,32 @@ class NodeTree {
         this.nodeTreeViewer.setDeleteNodeCallback(this.deleteNode);
         this.nodeTreeViewer.setAddRootNodeCallback(this.createRoot);
 
-        this.render();
+        this.nodeRepository.setOnloadCallback((nodes) => this.render(nodes));
+
+        this.nodeRepository.load()
 
     }
 
     deleteNode(node) {
         this.nodeRepository.delete(node);
-        this.render();
+        this.nodeRepository.load()
 
     }
 
     addNode(node) {
         this.nodeRepository.add(node);
-        this.render();
+        this.nodeRepository.load()
 
     }
 
     createRoot() {
         this.nodeRepository.createRoot();
-        this.render();
+        this.nodeRepository.load()
 
     }
 
-    render() {
-        this.nodeTreeViewer.setNodes(this.nodeRepository.getNodes());
+    render(nodes) {
+        this.nodeTreeViewer.setNodes(nodes);
         this.nodeTreeViewer.render();
 
     }

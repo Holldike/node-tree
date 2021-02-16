@@ -1,39 +1,100 @@
 class NodeRepository {
-    nodes;
+    onloadCallback;
 
-    constructor() {
-        this.nodes = NODES;
+    setOnloadCallback(callback) {
+        this.onloadCallback = callback;
 
     }
 
-    getNodes() {
-        return this.nodes;
+    load() {
+        let xhr = new XMLHttpRequest();
+
+        xhr.open('GET', '/node/getAll');
+
+        xhr.onload = function () {
+            if (xhr.status !== 200) {
+                console.log('Something went wrong');
+
+            } else {
+                this.onloadCallback(JSON.parse(xhr.responseText))
+
+            }
+
+        }.bind(this);
+
+        xhr.send();
 
     }
 
     delete(node) {
-        for (let i = 0; i < this.nodes.length; i++) {
-            if (this.nodes[i].parent_id === node.id || this.nodes[i].id === node.id) {
-                this.nodes.splice(i, 1);
+        let xhr = new XMLHttpRequest();
+
+        xhr.open('POST', '/node/delete');
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        xhr.onload = function () {
+            if (xhr.status !== 200) {
+                console.log('Something went wrong');
 
             }
 
-        }
+        };
+
+        xhr.send(this.param(node));
 
     }
 
     add(node) {
-        this.nodes.push({id: 23, name: 'node', parent_id: node.id});
+        let xhr = new XMLHttpRequest();
+
+        xhr.open('POST', '/node/add');
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        xhr.onload = function () {
+            if (xhr.status !== 200) {
+                console.log('Something went wrong');
+
+            }
+
+        };
+
+        xhr.send(this.param(node));
 
     }
 
     createRoot() {
-        this.nodes.push({id: 1, name: 'node', parent_id: null});
+        let xhr = new XMLHttpRequest();
+
+        xhr.open('POST', '/node/createRoot');
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        xhr.onload = function () {
+            if (xhr.status !== 200) {
+                console.log('Something went wrong');
+
+            }
+
+        };
+
+        xhr.send();
 
     }
 
-    save() {
-        //TODO: white save with ajax
+    param(object) {
+        let encodedString = '';
+
+        for (let prop in object) {
+            if (object.hasOwnProperty(prop)) {
+                if (encodedString.length > 0) {
+                    encodedString += '&';
+                }
+
+                encodedString += encodeURI(prop + '=' + object[prop]);
+            }
+
+        }
+
+        return encodedString;
 
     }
 

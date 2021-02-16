@@ -6,6 +6,6 @@ interface DbInterface
 {
     public function connect();
 
-    public function query($sql);
+    public function query($sql, $params);
 
 }

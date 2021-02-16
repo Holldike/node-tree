@@ -7,6 +7,7 @@ class NodeTreeViewer {
 
     constructor($box) {
         this.$box = $box;
+        this.render = this.render.bind(this);
 
     }
 
@@ -40,7 +41,7 @@ class NodeTreeViewer {
 
         let $remove = document.createElement('div');
 
-        if (node.parent_id === null && this.nodes.length > 1) {
+        if (node.parent_id === null) {
             $remove.onclick = () => this.$box.append(this.createDeleteConfirmation(node));
 
         } else {
@@ -123,12 +124,15 @@ class NodeTreeViewer {
         $buttonBox.className = 'modal-confirm-panel-button-box';
 
         let $consentButton = document.createElement('div');
-        $consentButton.onclick = () => this.deleteNodeCallback(node);
         $consentButton.className = 'modal-confirm-panel-consent-button';
         $consentButton.textContent = 'Yes';
+        $consentButton.onclick = () => {
+            this.deleteNodeCallback(node)
+            clearTimeout(timerInterval);
+
+        };
 
         let $cancelButton = document.createElement('div');
-
         $cancelButton.onclick = () => {
             this.closeDeleteConfirmation()
             clearTimeout(timerInterval);

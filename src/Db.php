@@ -12,6 +12,7 @@ class Db
 
     public function __construct(DbInterface $db)
     {
+
         $db->connect();
         $this->db = $db;
 
@@ -19,11 +20,13 @@ class Db
 
     /**
      * @param $sql
-     * @return mixed
+     * @param $params
+     * @return array
      */
-    public function query($sql)
+    public function query($sql, $params)
     {
-        return $this->db->query($sql);
+
+        return $this->db->query($sql, $params);
 
     }
 

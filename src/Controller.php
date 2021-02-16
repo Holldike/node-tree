@@ -1,5 +1,7 @@
 <?php
 
+use Model\Node;
+
 abstract class Controller
 {
     /**
@@ -11,6 +13,12 @@ abstract class Controller
     {
         $this->view = new View;
 
+    }
+
+    protected function jsonResponse($data)
+    {
+        header('Content-Type: application/json');
+        echo json_encode($data);
     }
 
 }
