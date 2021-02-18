@@ -77,19 +77,36 @@ class NodeTreeViewer {
 
     }
 
+    getChildren(parent_id) {
+        for (let i = 0, length = this.nodes.length; i < length; i++) {
+            if (this.nodes[i].parent_id === parent_id) {
+                return true;
+
+            }
+
+        }
+
+        return false;
+    }
+
     createTreeElement(nodes, parent_id) {
+        if (!this.getChildren(parent_id)) {
+            return document.createElement('div');
+
+        }
+
         let $tree = document.createElement('div');
         $tree.className = 'tree';
 
         for (let i = 0, length = nodes.length; i < length; i++) {
-            if (nodes[i].parent_id === parent_id) {
-                let $node = this.createNodeElement(nodes[i]);
-
-                $node.append(this.createTreeElement(nodes, nodes[i].id));
-
-                $tree.append($node);
+            if (nodes[i].parent_id !== parent_id) {
+                continue;
 
             }
+
+            let $node = this.createNodeElement(nodes[i]);
+            $node.append(this.createTreeElement(nodes, nodes[i].id));
+            $tree.append($node);
 
         }
 
