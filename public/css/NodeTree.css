@@ -12,6 +12,13 @@
 
 }
 
+.modal-set-name-input {
+    display: block;
+    margin: auto;
+    width: 100%;
+
+}
+
 .modal {
     color: rgb(43 42 42);
     background: white;
@@ -22,6 +29,8 @@
 }
 
 .modal-close {
+    font-weight: bold;
+    color: #922632;
     position: absolute;
     right: 0;
     top: 0;
@@ -43,7 +52,7 @@
 
 .modal-confirm-panel {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     border-top: 1px solid silver;
     padding: 5px;
 
@@ -78,7 +87,7 @@
 
 }
 
-.delete-confirmation {
+.overlay {
     position: absolute;
     top: 0;
     right: 0;
@@ -132,7 +141,13 @@
 }
 
 .control-panel div {
-    padding: 2px;
     margin: 3px;
+    padding: 4px;
+
+}
+
+.node-name {
+    background: #303195;
+    color: white;
 
 }

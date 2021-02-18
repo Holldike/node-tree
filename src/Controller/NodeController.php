@@ -37,19 +37,41 @@ class NodeController extends AbstractController
     public function addAction()
     {
 
-        $node = new Node();
-        $node->assign(['name' => 'node', 'parent_id' => $_POST['id']]);
-        $node->save();
+        $json = json_decode($this->getHttpBody(), true);
+        $parent = $json;
+
+        if ($parentNode = (new Node)->load($parent['id'])) {
+            $node = new Node();
+            $node->assign(['name' => 'node', 'parent_id' => $parentNode->getId()]);
+            $node->save();
+
+        }
+
+    }
+
+    public function updateAction()
+    {
+
+        $json = json_decode($this->getHttpBody(), true);
+
+        if ($node = (new Node)->load($json['id'])) {
+            $node->assign($json);
+            $node->save();
+
+        }
 
     }
 
     public function deleteAction()
     {
 
-        if ($node = (new Node)->load($_POST['id'])) {
+        $json = json_decode($this->getHttpBody(), true);
+
+        if ($node = (new Node)->load($json['id'])) {
             $node->delete();
 
         }
 
     }
+
 }

@@ -1,12 +1,15 @@
 class NodeTreeViewer {
     $box
     nodes;
+    updateNodeCallback;
     addNodeCallback;
     deleteNodeCallback;
-    addRootNodeCallback;
+    nodeTreeModalViewer;
 
     constructor($box) {
         this.$box = $box;
+        this.nodeTreeModalViewer = new NodeTreeModalViewer(this);
+
         this.render = this.render.bind(this);
 
     }
@@ -21,6 +24,11 @@ class NodeTreeViewer {
 
     }
 
+    setUpdateNodeCallback(callback) {
+        this.updateNodeCallback = callback;
+
+    }
+
     setAddRootNodeCallback(callback) {
         this.addRootNodeCallback = callback;
 
@@ -32,17 +40,18 @@ class NodeTreeViewer {
     }
 
     createNodeElement(node) {
-        let $add = document.createElement('div');
-        $add.onclick = () => this.addNodeCallback(node);
-        $add.innerHTML = '+';
-
+        let $controlPanel = document.createElement('div');
+        let $element = document.createElement('div');
+        let $remove = document.createElement('div');
         let $name = document.createElement('div');
+        let $add = document.createElement('div');
+
+        $name.className = 'node-name';
+        $name.onclick = () => this.$box.append(this.nodeTreeModalViewer.createSetNameModal(node));
         $name.innerHTML = node.name;
 
-        let $remove = document.createElement('div');
-
         if (node.parent_id === null) {
-            $remove.onclick = () => this.$box.append(this.createDeleteConfirmation(node));
+            $remove.onclick = () => this.$box.append(this.nodeTreeModalViewer.createDeleteNodeModal(node));
 
         } else {
             $remove.onclick = () => this.deleteNodeCallback(node);
@@ -51,14 +60,15 @@ class NodeTreeViewer {
 
         $remove.innerHTML = '-';
 
-        let $controlPanel = document.createElement('div');
+        $add.onclick = () => this.addNodeCallback(node);
+        $add.innerHTML = '+';
+
         $controlPanel.className = 'control-panel';
 
-        $controlPanel.append($add)
-        $controlPanel.append($name)
-        $controlPanel.append($remove)
+        $controlPanel.append($remove);
+        $controlPanel.append($name);
+        $controlPanel.append($add);
 
-        let $element = document.createElement('div');
         $element.className = 'node';
 
         $element.append($controlPanel);
@@ -67,121 +77,23 @@ class NodeTreeViewer {
 
     }
 
-    createDeleteConfirmation(node) {
-        let $deleteConfirmation = document.createElement('div');
-        $deleteConfirmation.className = 'delete-confirmation';
-
-        let $modal = document.createElement('div');
-        $modal.className = 'modal';
-
-        let $h4 = document.createElement('h4');
-        $h4.className = 'modal-header';
-        $h4.textContent = 'Delete Confirmation';
-
-        let $text = document.createElement('div');
-        $text.className = 'modal-text';
-        $text.textContent = "This is very dangerous, you shouldn't do this! Are you really sure ?"
-
-        let $confirmPanel = document.createElement('div');
-        $confirmPanel.className = 'modal-confirm-panel';
-
-        let $timer = document.createElement('div');
-        $timer.className = 'modal-confirm-panel-timer';
-
-        let timeoutSecond = 20;
-        let $timeout = document.createElement('div');
-        $timeout.textContent = String(timeoutSecond);
-
-        $timer.append($timeout);
-
-        let timerInterval = setInterval(function (closeDeleteConfirmation) {
-                --timeoutSecond;
-
-                if (timeoutSecond < 0) {
-                    closeDeleteConfirmation();
-                    clearTimeout(timerInterval);
-
-                }
-
-                $timer.textContent = String(timeoutSecond);
-
-
-            }, 1000, this.closeDeleteConfirmation
-        );
-
-        let $close = document.createElement('div');
-
-        $close.onclick = () => {
-            this.closeDeleteConfirmation()
-            clearTimeout(timerInterval);
-
-        };
-
-        $close.className = 'modal-close';
-        $close.textContent = 'X';
-
-        let $buttonBox = document.createElement('div')
-        $buttonBox.className = 'modal-confirm-panel-button-box';
-
-        let $consentButton = document.createElement('div');
-        $consentButton.className = 'modal-confirm-panel-consent-button';
-        $consentButton.textContent = 'Yes';
-        $consentButton.onclick = () => {
-            this.deleteNodeCallback(node)
-            clearTimeout(timerInterval);
-
-        };
-
-        let $cancelButton = document.createElement('div');
-        $cancelButton.onclick = () => {
-            this.closeDeleteConfirmation()
-            clearTimeout(timerInterval);
-
-        };
-
-        $cancelButton.className = 'modal-confirm-panel-cancel-button';
-
-        $cancelButton.textContent = 'No';
-
-        $buttonBox.append($cancelButton);
-        $buttonBox.append($consentButton);
-
-        $confirmPanel.append($timer);
-        $confirmPanel.append($buttonBox);
-
-        $modal.append($h4);
-        $modal.append($text);
-        $modal.append($close);
-        $modal.append($confirmPanel);
-
-        $deleteConfirmation.append($modal);
-
-        return $deleteConfirmation;
-
-    }
-
-    closeDeleteConfirmation() {
-        document.querySelector('.delete-confirmation').remove();
-
-    }
-
-    createTreeDOM(nodes, parent_id) {
-        let $dom = document.createElement('div');
-        $dom.className = 'tree';
+    createTreeElement(nodes, parent_id) {
+        let $tree = document.createElement('div');
+        $tree.className = 'tree';
 
         for (let i = 0, length = nodes.length; i < length; i++) {
             if (nodes[i].parent_id === parent_id) {
                 let $node = this.createNodeElement(nodes[i]);
 
-                $node.append(this.createTreeDOM(nodes, nodes[i].id));
+                $node.append(this.createTreeElement(nodes, nodes[i].id));
 
-                $dom.append($node);
+                $tree.append($node);
 
             }
 
         }
 
-        return $dom;
+        return $tree;
 
     }
 
@@ -208,7 +120,7 @@ class NodeTreeViewer {
             this.$box.append(this.createCreateRootElement());
 
         } else {
-            this.$box.append(this.createTreeDOM(this.nodes, null));
+            this.$box.append(this.createTreeElement(this.nodes, null));
 
         }
 

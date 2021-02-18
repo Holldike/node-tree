@@ -30,7 +30,7 @@ class NodeRepository {
         let xhr = new XMLHttpRequest();
 
         xhr.open('POST', '/node/delete');
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('Content-Type', 'application/json');
 
         xhr.onload = function () {
             if (xhr.status !== 200) {
@@ -40,7 +40,7 @@ class NodeRepository {
 
         };
 
-        xhr.send(this.param(node));
+        xhr.send(JSON.stringify(node));
 
     }
 
@@ -48,7 +48,7 @@ class NodeRepository {
         let xhr = new XMLHttpRequest();
 
         xhr.open('POST', '/node/add');
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('Content-Type', 'application/json');
 
         xhr.onload = function () {
             if (xhr.status !== 200) {
@@ -58,7 +58,24 @@ class NodeRepository {
 
         };
 
-        xhr.send(this.param(node));
+        xhr.send(JSON.stringify(node));
+    }
+
+    update(node) {
+        let xhr = new XMLHttpRequest();
+
+        xhr.open('POST', '/node/update');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onload = function () {
+            if (xhr.status !== 200) {
+                console.log('Something went wrong');
+
+            }
+
+        };
+
+        xhr.send(JSON.stringify(node));
 
     }
 
@@ -66,7 +83,7 @@ class NodeRepository {
         let xhr = new XMLHttpRequest();
 
         xhr.open('POST', '/node/createRoot');
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('Content-Type', 'application/json');
 
         xhr.onload = function () {
             if (xhr.status !== 200) {
@@ -77,24 +94,6 @@ class NodeRepository {
         };
 
         xhr.send();
-
-    }
-
-    param(object) {
-        let encodedString = '';
-
-        for (let prop in object) {
-            if (object.hasOwnProperty(prop)) {
-                if (encodedString.length > 0) {
-                    encodedString += '&';
-                }
-
-                encodedString += encodeURI(prop + '=' + object[prop]);
-            }
-
-        }
-
-        return encodedString;
 
     }
 

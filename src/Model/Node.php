@@ -79,6 +79,7 @@ class Node extends AbstractModel
      */
     public function assign($data)
     {
+
         foreach ($data as $prop => $value) {
             if (property_exists($this, $prop)) {
                 $this->$prop = $value;

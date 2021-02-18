@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>!DOCTYPE</title>
-    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/NodeTree.css">
 </head>
 
 <body>
@@ -12,24 +12,12 @@
     </div>
 </div>
 
+<script src="js/NodeTree.js"></script>
 <script src="js/NodeRepository.js"></script>
 <script src="js/NodeTreeViewer.js"></script>
-<script src="js/NodeTree.js"></script>
+<script src="js/NodeTreeModalViewer.js"></script>
 
 <script>
-    const NODES = [
-        {id: 0, name: 'node-0', parent_id: null},
-        {id: 1, name: 'node-1', parent_id: 0},
-        {id: 2, name: 'node-2', parent_id: 1},
-        {id: 3, name: 'node-3', parent_id: 1},
-        {id: 4, name: 'node-4', parent_id: 0},
-        {id: 5, name: 'node-5', parent_id: 2},
-        {id: 6, name: 'node-6', parent_id: 2},
-        {id: 7, name: 'node-7', parent_id: 0},
-        {id: 8, name: 'node-8', parent_id: 0},
-        {id: 9, name: 'node-9', parent_id: 0},
-    ]
-
     let nodeRepository = new NodeRepository();
     let nodeTreeViewer = new NodeTreeViewer(document.getElementById('root'));
 
