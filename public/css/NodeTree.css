@@ -151,3 +151,23 @@
     color: white;
 
 }
+
+.drop-down-button {
+    display: inline-block;
+    cursor: pointer;
+
+}
+
+.drop-down-button-open {
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #6be8aa;
+
+}
+
+.drop-down-button-closed {
+    border-top: 5px solid transparent;
+    border-left: 5px solid #6be8aa;
+    border-bottom: 5px solid transparent;
+
+}

@@ -39,6 +39,26 @@ class NodeTreeViewer {
 
     }
 
+    createDropDownElement() {
+        let $element = document.createElement('div');
+        $element.className = 'drop-down-button drop-down-button-open';
+        $element.onclick = function () {
+            let $tree = $element.nextSibling;
+
+            if ($tree.style.display === 'none') {
+                $tree.setAttribute('style', 'display: block');
+                $element.className = 'drop-down-button drop-down-button-open';
+                return;
+            }
+
+            $element.className = 'drop-down-button drop-down-button-closed';
+            $tree.setAttribute('style', 'display: none');
+
+        }
+
+        return $element;
+    }
+
     createNodeElement(node) {
         let $controlPanel = document.createElement('div');
         let $element = document.createElement('div');
@@ -73,11 +93,16 @@ class NodeTreeViewer {
 
         $element.append($controlPanel);
 
+        if (this.childrenExists(node.id)) {
+            $element.append(this.createDropDownElement());
+
+        }
+
         return $element;
 
     }
 
-    getChildren(parent_id) {
+    childrenExists(parent_id) {
         for (let i = 0, length = this.nodes.length; i < length; i++) {
             if (this.nodes[i].parent_id === parent_id) {
                 return true;
@@ -90,11 +115,6 @@ class NodeTreeViewer {
     }
 
     createTreeElement(nodes, parent_id) {
-        if (!this.getChildren(parent_id)) {
-            return document.createElement('div');
-
-        }
-
         let $tree = document.createElement('div');
         $tree.className = 'tree';
 
