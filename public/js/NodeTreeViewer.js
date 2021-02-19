@@ -1,36 +1,9 @@
 class NodeTreeViewer {
-    $box
-    nodes;
-    updateNodeCallback;
-    addNodeCallback;
-    deleteNodeCallback;
-    nodeTreeModalViewer;
+    nodeTree;
 
-    constructor($box) {
-        this.$box = $box;
+    constructor(nodeTree) {
+        this.nodeTree = nodeTree;
         this.nodeTreeModalViewer = new NodeTreeModalViewer(this);
-
-        this.render = this.render.bind(this);
-
-    }
-
-    setDeleteNodeCallback(callback) {
-        this.deleteNodeCallback = callback;
-
-    }
-
-    setAddNodeCallback(callback) {
-        this.addNodeCallback = callback;
-
-    }
-
-    setUpdateNodeCallback(callback) {
-        this.updateNodeCallback = callback;
-
-    }
-
-    setAddRootNodeCallback(callback) {
-        this.addRootNodeCallback = callback;
 
     }
 
@@ -49,6 +22,7 @@ class NodeTreeViewer {
                 $tree.setAttribute('style', 'display: block');
                 $element.className = 'drop-down-button drop-down-button-open';
                 return;
+
             }
 
             $element.className = 'drop-down-button drop-down-button-closed';
@@ -57,6 +31,7 @@ class NodeTreeViewer {
         }
 
         return $element;
+
     }
 
     createNodeElement(node) {
@@ -67,20 +42,21 @@ class NodeTreeViewer {
         let $add = document.createElement('div');
 
         $name.className = 'node-name';
-        $name.onclick = () => this.$box.append(this.nodeTreeModalViewer.createSetNameModal(node));
+        $name.onclick = () => this.nodeTree.$box.append(this.nodeTreeModalViewer.createSetNameModal(node));
         $name.innerHTML = node.name;
 
         if (node.parent_id === null) {
-            $remove.onclick = () => this.$box.append(this.nodeTreeModalViewer.createDeleteNodeModal(node));
+            $remove.onclick = () =>
+                this.nodeTree.$box.append(this.nodeTreeModalViewer.createDeleteNodeModal(node));
 
         } else {
-            $remove.onclick = () => this.deleteNodeCallback(node);
+            $remove.onclick = () => this.nodeTree.deleteNode(node);
 
         }
 
         $remove.innerHTML = '-';
 
-        $add.onclick = () => this.addNodeCallback(node);
+        $add.onclick = () => this.nodeTree.addNode(node);
         $add.innerHTML = '+';
 
         $controlPanel.className = 'control-panel';
@@ -114,18 +90,18 @@ class NodeTreeViewer {
         return false;
     }
 
-    createTreeElement(nodes, parent_id) {
+    createTreeElement(parent_id) {
         let $tree = document.createElement('div');
         $tree.className = 'tree';
 
-        for (let i = 0, length = nodes.length; i < length; i++) {
-            if (nodes[i].parent_id !== parent_id) {
+        for (let i = 0, length = this.nodes.length; i < length; i++) {
+            if (this.nodes[i].parent_id !== parent_id) {
                 continue;
 
             }
 
-            let $node = this.createNodeElement(nodes[i]);
-            $node.append(this.createTreeElement(nodes, nodes[i].id));
+            let $node = this.createNodeElement(this.nodes[i]);
+            $node.append(this.createTreeElement(this.nodes[i].id));
             $tree.append($node);
 
         }
@@ -136,7 +112,7 @@ class NodeTreeViewer {
 
     createCreateRootElement() {
         let $createRoot = document.createElement('div');
-        $createRoot.onclick = this.addRootNodeCallback;
+        $createRoot.onclick = () => this.nodeTree.createRoot();
         $createRoot.className = 'create-root'
         $createRoot.textContent = 'Create Root';
 
@@ -145,19 +121,19 @@ class NodeTreeViewer {
     }
 
     render() {
-        if (this.$box.children.length) {
-            while (this.$box.firstChild) {
-                this.$box.removeChild(this.$box.lastChild);
+        if (this.nodeTree.$box.children.length) {
+            while (this.nodeTree.$box.firstChild) {
+                this.nodeTree.$box.removeChild(this.nodeTree.$box.lastChild);
 
             }
 
         }
 
         if (!this.nodes.length) {
-            this.$box.append(this.createCreateRootElement());
+            this.nodeTree.$box.append(this.createCreateRootElement());
 
         } else {
-            this.$box.append(this.createTreeElement(this.nodes, null));
+            this.nodeTree.$box.append(this.createTreeElement(null));
 
         }
 

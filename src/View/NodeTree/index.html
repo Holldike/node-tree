@@ -18,12 +18,8 @@
 <script src="js/NodeTreeModalViewer.js"></script>
 
 <script>
-    let nodeRepository = new NodeRepository();
-    let nodeTreeViewer = new NodeTreeViewer(document.getElementById('root'));
-
     new NodeTree(
-        nodeRepository,
-        nodeTreeViewer
+        document.getElementById('root')
     );
 
 </script>

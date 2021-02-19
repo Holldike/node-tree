@@ -1,12 +1,5 @@
 class NodeRepository {
-    onloadCallback;
-
-    setOnloadCallback(callback) {
-        this.onloadCallback = callback;
-
-    }
-
-    load() {
+    load(onloadCallback) {
         let xhr = new XMLHttpRequest();
 
         xhr.open('GET', '/node/getAll');
@@ -16,11 +9,11 @@ class NodeRepository {
                 console.log('Something went wrong');
 
             } else {
-                this.onloadCallback(JSON.parse(xhr.responseText))
+                onloadCallback(JSON.parse(xhr.responseText))
 
             }
 
-        }.bind(this);
+        };
 
         xhr.send();
 

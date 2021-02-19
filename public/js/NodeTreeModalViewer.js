@@ -43,9 +43,10 @@ class NodeTreeModalViewer {
             () => $overlay.remove(),
             () => {
                 node.name = $input.value;
-                this.nodeTreeViewer.updateNodeCallback(node);
+                this.nodeTreeViewer.nodeTree.updateNode(node);
 
             }
+
         );
 
         $overlay.className = 'overlay';
@@ -56,6 +57,7 @@ class NodeTreeModalViewer {
         $h4.textContent = 'Set new name of node: ' + node.name;
 
         $input.className = 'modal-set-name-input'
+        $input.value = node.name;
 
         $close.onclick = () => $overlay.remove();
         $close.className = 'modal-close';
@@ -97,7 +99,7 @@ class NodeTreeModalViewer {
         let $confirmPanel = this.createConfirmPanel(
             () => $overlay.remove(),
             () => {
-                this.nodeTreeViewer.deleteNodeCallback(node);
+                this.nodeTreeViewer.nodeTree.deleteNode(node);
                 clearTimeout(timerInterval);
 
             }
