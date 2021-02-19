@@ -83,12 +83,12 @@ class NodeTreeModalViewer {
         let $text = document.createElement('div');
         let $h4 = document.createElement('h4');
         let timeoutSecond = 20;
-        let timerInterval = setInterval(function () {
+        let timeoutInterval = setInterval(function () {
                 --timeoutSecond;
 
                 if (timeoutSecond < 0) {
                     $overlay.remove();
-                    clearTimeout(timerInterval);
+                    clearTimeout(timeoutInterval);
 
                 }
 
@@ -100,7 +100,7 @@ class NodeTreeModalViewer {
             () => $overlay.remove(),
             () => {
                 this.nodeTreeViewer.nodeTree.deleteNode(node);
-                clearTimeout(timerInterval);
+                clearTimeout(timeoutInterval);
 
             }
         );

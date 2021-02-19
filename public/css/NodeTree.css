@@ -16,6 +16,7 @@
     display: block;
     margin: auto;
     width: 100%;
+    padding: 5px;
 
 }
 
@@ -51,39 +52,38 @@
 }
 
 .modal-confirm-panel {
-    display: flex;
-    justify-content: center;
     border-top: 1px solid silver;
     padding: 5px;
+    text-align: right;
 
 }
 
 .modal-confirm-panel-timer {
     color: #973232;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    padding: 5px;
+    display: inline-block;
+    float: left;
 
 }
 
 .modal-confirm-panel-button-box {
-    display: flex;
+    display: inline-block;
 
 }
 
 .modal-confirm-panel-consent-button {
-    margin: 5px;
     background: #6be9aa;
     padding: 5px;
     cursor: pointer;
+    display: inline-block;
 
 }
 
 .modal-confirm-panel-cancel-button {
-    margin: 5px;
     background: #cc9ba0;
     padding: 5px;
     cursor: pointer;
+    display: inline-block;
 
 }
 
